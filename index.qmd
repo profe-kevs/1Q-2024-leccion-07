@@ -1,22 +1,56 @@
+---
+title: Quarto Computations
+jupyter: python3
+---
+
+# Pruebas con gapminder
+
+## Probando el editor de quarto
+
 ```{python}
-import sqlite3
 import pandas as pd
 
-with sqlite3.connect('quakes.db') as connection:
-    pd.read_csv('tsunamis.csv').to_sql(
-        name="tsunamis",
-        con=connection,
-        index=False,
-        if_exists='replace'
-    )
+pd.DataFrame([1,2,3])
+```
+
+## Gapminder
+
+```{python}
+import plotly.express as px
+fig = px.bar(x=["a", "b", "c"], y=[1, 3, 2])
+fig.show()
 ```
 
 ```{python}
-import sqlite3
-import pandas as pd
+import plotly.express as px
+df = px.data.gapminder()
+df
+```
 
-with sqlite3.connect('quakes.db') as connection:
-    tsunamis = pd.read_sql("SELECT * FROM tsunamis", connection)
+```{python}
+px.scatter(  
+  df, x="gdpPercap", y="lifeExp", 
+  animation_frame="year", animation_group="country", 
+  size="pop", color="continent", hover_name="country",
+  facet_col="continent", log_x=True, size_max=45, 
+  range_x=[100,100000], range_y=[25,90] 
+) 
+```
 
-tsunamis.head()
+## Row {height=40%}
+
+```{python}
+#| title: Population
+px.area(
+  df, x="year", y="pop", 
+  color="continent", line_group="country"
+)
+```
+
+```{python}
+#| title: Life Expectancy
+px.line(
+  df, x="year", y="lifeExp", 
+  color="continent", line_group="country"
+)
 ```
